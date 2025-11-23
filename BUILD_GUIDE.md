@@ -4,13 +4,211 @@
 
 This repository contains Peter Zipfel's CADAC (Computer Aided Design of Aerospace Concepts) simulations, originally designed for Microsoft Visual Studio 2013. The code has been modernized with cross-platform Makefiles for building with GNU Make and g++.
 
-## Quick Start
+**Note for Aerospace Engineers**: This guide assumes no prior experience with compiling software. All commands are provided - just copy and paste them into your terminal.
+
+## Installation Instructions
 
 ### Prerequisites
 
-- **C++ Compiler**: g++ with C++11 support (GCC 4.8.1 or later)
-- **Build Tool**: GNU Make
-- **Operating System**: Linux, macOS, or Windows (with MinGW/Cygwin)
+You need two things:
+1. **C++ Compiler**: g++ with C++11 support (GCC 4.8.1 or later)
+2. **Build Tool**: GNU Make
+
+### Linux Installation (Recommended)
+
+#### Ubuntu / Debian / Linux Mint / Pop!_OS
+
+Open a terminal and run these commands:
+
+```bash
+# Update package list
+sudo apt update
+
+# Install C++ compiler and Make
+sudo apt install -y build-essential
+
+# Verify installation
+g++ --version
+make --version
+```
+
+You should see output like:
+```
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+GNU Make 4.3
+```
+
+#### Fedora / RHEL / CentOS / AlmaLinux
+
+```bash
+# Install development tools
+sudo dnf groupinstall "Development Tools"
+
+# Or on older systems:
+sudo yum groupinstall "Development Tools"
+
+# Verify installation
+g++ --version
+make --version
+```
+
+#### Arch Linux / Manjaro
+
+```bash
+# Install base development tools
+sudo pacman -S base-devel
+
+# Verify installation
+g++ --version
+make --version
+```
+
+### macOS Installation
+
+#### Using Homebrew (Recommended)
+
+1. **Install Homebrew** (if you don't have it):
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+
+2. **Install GCC and Make**:
+   ```bash
+   brew install gcc make
+
+   # Verify installation
+   g++ --version
+   make --version
+   ```
+
+#### Using Xcode Command Line Tools (Alternative)
+
+```bash
+# Install Xcode command line tools
+xcode-select --install
+
+# Verify installation
+g++ --version
+make --version
+```
+
+### Windows Installation (Use WSL2)
+
+**For Windows users**: We strongly recommend using Windows Subsystem for Linux (WSL2) rather than trying to compile natively on Windows. WSL2 provides a full Linux environment inside Windows.
+
+#### Step 1: Install WSL2
+
+1. **Open PowerShell as Administrator** (Right-click Start → Windows PowerShell (Admin))
+
+2. **Run this command**:
+   ```powershell
+   wsl --install
+   ```
+
+3. **Restart your computer** when prompted
+
+4. **After restart**, Ubuntu will automatically open and ask you to create a username and password
+
+#### Step 2: Install Build Tools in WSL
+
+Once Ubuntu is running in WSL:
+
+```bash
+# Update package list
+sudo apt update
+
+# Install C++ compiler and Make
+sudo apt install -y build-essential
+
+# Verify installation
+g++ --version
+make --version
+```
+
+#### Step 3: Access Your Windows Files
+
+Your Windows C: drive is available at `/mnt/c/` in WSL:
+
+```bash
+# Example: If you cloned the repo to C:\Users\YourName\CADAC
+cd /mnt/c/Users/YourName/CADAC
+
+# Or create a Linux directory for projects
+mkdir -p ~/projects
+cd ~/projects
+```
+
+#### Using WSL Tips
+
+- **Open WSL Terminal**: Search for "Ubuntu" in Windows Start menu
+- **Copy/Paste**: Right-click in WSL terminal to paste
+- **File Access**: You can access WSL files from Windows Explorer at `\\wsl$\Ubuntu\home\yourusername`
+- **VS Code Integration**: Install "Remote - WSL" extension in VS Code to edit files easily
+
+### Windows (Native) - Advanced Users Only
+
+If you prefer not to use WSL, you can use MinGW or Cygwin:
+
+#### MinGW-w64 (Minimal)
+
+1. Download from: https://www.mingw-w64.org/downloads/#w64devkit
+2. Extract to `C:\mingw64`
+3. Add `C:\mingw64\bin` to your PATH
+4. Open Command Prompt and verify:
+   ```cmd
+   g++ --version
+   mingw32-make --version
+   ```
+
+Note: Use `mingw32-make` instead of `make` on Windows.
+
+#### Cygwin (Full Unix Environment)
+
+1. Download installer from: https://www.cygwin.com/
+2. During installation, select these packages:
+   - `gcc-g++`
+   - `make`
+   - `git` (optional, but recommended)
+3. Use Cygwin terminal for all commands
+
+### Verification
+
+After installation, verify everything works:
+
+```bash
+# Check compiler
+g++ --version
+
+# Check make
+make --version
+
+# Create a test file
+echo 'int main() { return 0; }' > test.cpp
+
+# Compile it
+g++ -std=c++11 test.cpp -o test
+
+# Run it
+./test
+
+# Clean up
+rm test test.cpp
+
+# If all commands succeed, you're ready!
+```
+
+## Quick Start
+
+### Clone or Download the Repository
+
+```bash
+# If you have git:
+git clone https://github.com/yakaboskic/CADAC.git
+cd CADAC
+
+# Or download ZIP from GitHub and extract it
+cd CADAC-main  # or wherever you extracted it
+```
 
 ### Building All Simulations
 
@@ -342,6 +540,47 @@ Matrix INV = MAT.inverse();   // Inverse
 
 ## Troubleshooting
 
+### Installation Issues
+
+**Problem: "sudo: command not found"**
+- You might not be logged in as a user with sudo access
+- Try using `su` to become root: `su -` then run `apt install build-essential`
+- On some systems, use `doas` instead of `sudo`
+
+**Problem: "E: Unable to locate package build-essential"** (Ubuntu/Debian)
+- Your package list might be out of date
+- Run: `sudo apt update` then try again
+
+**Problem: "bash: g++: command not found" after installation**
+- The installation might have failed
+- Try: `sudo apt install --reinstall build-essential`
+- Or install manually: `sudo apt install gcc g++ make`
+
+**Problem: "Permission denied" when running make**
+- The executable bit might not be set
+- Run: `chmod +x magsix` (or whatever your executable is called)
+
+**Problem: WSL not available on Windows**
+- You need Windows 10 version 2004+ or Windows 11
+- Check your version: Press Win+R, type `winver`, press Enter
+- If too old, update Windows or use MinGW instead
+
+**Problem: "gcc version is too old"**
+- Check version: `g++ --version`
+- You need at least GCC 4.8.1 for C++11 support
+- On Ubuntu/Debian: `sudo apt install gcc-11 g++-11`
+- Then use: `make CXX=g++-11`
+
+**Problem: "make: command not found"**
+- Make wasn't installed
+- Ubuntu/Debian: `sudo apt install make`
+- macOS: `brew install make` or `xcode-select --install`
+
+**Problem: Slow compilation on Windows with WSL**
+- Don't compile from `/mnt/c/` (Windows filesystem)
+- Copy to WSL filesystem: `cp -r /mnt/c/path/to/CADAC ~/CADAC`
+- Then compile from `~/CADAC` (much faster)
+
 ### Common Build Errors
 
 **Error: `strcpy` was not declared**
@@ -357,8 +596,14 @@ Matrix INV = MAT.inverse();   // Inverse
   ./magsix  # NOT: ../MAGSIX/magsix from example/
   ```
 
+**Error: "No such file or directory" when compiling**
+- **Solution**: You might be in the wrong directory
+- Make sure you're in the CADAC root directory or a specific example directory
+- Run `pwd` to see where you are
+
 **Warning: ignoring return value of 'system'**
 - **Info**: Harmless warning from `system("pause")` calls (Windows legacy)
+- These can be ignored - the code works fine
 
 ### Runtime Issues
 
