@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <string>		
+#include <cstring>
 #include "utility_header.hpp"
 
 using namespace std;

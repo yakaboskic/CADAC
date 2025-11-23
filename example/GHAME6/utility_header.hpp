@@ -136,15 +136,15 @@ public:
 
 	//Returns nxn diagonal matrix  from nx1 vector 
 	//Example: DIAMAT=VEC.diamat_vec()
-	Matrix Matrix::diamat_vec();
+	Matrix diamat_vec();
 
 	//Returns nx1 diagonal vector from nxn matrix
 	//Example: VEC=MAT.diavec_mat();
-	Matrix Matrix::diavec_mat();
+	Matrix diavec_mat();
 
 	//Dimensions a matrix of size row x col
 	//Example: MAT.dimension(3,3);
-	void Matrix::dimension(int row,int col);
+	void dimension(int row,int col);
 
 	//Bi-variate ellipse
 	//calculating major and minor semi-axes of ellipse and rotation angle 
@@ -154,7 +154,7 @@ public:
 	//angle      = ELLIPSE.get_loc(2,0);
 	//
 	//Example: ELLIPSE = MAT.ellipse();
-	Matrix Matrix::ellipse();
+	Matrix ellipse();
 
 	//Returns the number of columns of matrix MAT
 	//Example: nc = MAT.get_cols();
@@ -185,7 +185,7 @@ public:
 
 	//Returns 3x3 matrix row-wise from 9x1 vector
 	//Example: MAT=VEC.	mat33_vec9();
-	Matrix Matrix::mat33_vec9();
+	Matrix mat33_vec9();
 	
 	//Forms  matrix MAT with all elements '1.' from object MAT(num_row,num_col)
 	//Example: MAT.ones();
@@ -258,7 +258,7 @@ public:
 
 	//Returns the component(i) from vector VEC[i] or assigns a value to component VEC[i]
 	//Examples: comp_i=VEC[i]; VEC[i]=comp_i;
-	double & Matrix::operator [](const int &r);
+	double & operator [](const int &r);
 
 	//Scalar product operator (any combination of row or column vectors)  
 	//Example: value = AMAT ^ BMAT;  
@@ -266,7 +266,7 @@ public:
 
 	//Unit vector cross product from two 3x1 vectors  
 	//Example: UNIT = VEC1%VEC2;  
-	Matrix Matrix::operator%(const Matrix &B);
+	Matrix operator%(const Matrix &B);
 
 	//Alternate transpose Aij=>Aji
 	//Example: BMAT = ~AMAT;
@@ -301,7 +301,7 @@ public:
 
 	//Returns unit vector from 3x1 vector
 	//Example: UVEC=VEC.univec3();
-	Matrix Matrix::univec3();
+	Matrix univec3();
 
 	//Forms a zero matrix MAT from object MAT(num_row,num_col)
 	//Example: MAT.zero();
@@ -309,7 +309,7 @@ public:
 
 	//Returns 9x1 vector from 3x3 matrix row-wise
 	//Example: VEC=MAT.vec9_mat33();
-	Matrix Matrix::vec9_mat33();
+	Matrix vec9_mat33();
 };
 
 ///////////////////////////////////////////////////////////////////////////////
