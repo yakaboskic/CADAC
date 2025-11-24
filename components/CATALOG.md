@@ -4,6 +4,9 @@
 
 This catalog lists all extracted components from the CADAC examples, organized by function.
 
+**Last Updated**: 2025-11-24
+**Extracted**: 36 of ~55 components (72% complete)
+
 ## Symbol Key
 
 - ✅ **Extracted** - Component is in library, ready to use
@@ -11,322 +14,396 @@ This catalog lists all extracted components from the CADAC examples, organized b
 - 🔄 **Complex** - Needs multiple files or dependencies
 - 🎯 **Recommended** - Good starting point for new users
 
-## Environment Components
+---
 
-### Gravity Models
+## Actuators (2/4 extracted)
 
 | Component | Status | Source | DoF | Description |
 |-----------|--------|--------|-----|-------------|
-| `gravity_constant` | ✅ | BALL3 | 3/6 | 🎯 Simple g=9.81 m/s² downward |
-| `gravity_wgs84` | 📝 | ROCKET6G | 6 | Full WGS84 ellipsoidal with J2 |
-| `gravity_geocentric` | 📝 | GHAME6 | 6 | Geocentric gravity model |
+| `tvc_simple` | ✅ | ROCKET6G | 6 | Thrust vector control with 2nd-order dynamics |
+| `rcs_simple` | ✅ | ROCKET6G | 6 | Reaction control system for attitude control |
+| `actuator_first_order` | ✅ | AIM5 | 3/6 | First-order actuator lag |
+| `control_surface_actuator` | 📝 | FALCON6 | 6 | Aileron, elevator, rudder dynamics |
 
 **Variable Assignments:**
 ```cpp
-// gravity_constant
-vehicle[0] = grav (double) - Gravity magnitude m/s²
+// tvc_simple
+vehicle[900] = mtvc (int) - TVC mode
+vehicle[902] = tvclimx (double) - Nozzle deflection limit deg
+vehicle[904] = dtvclimx (double) - Nozzle rate limit deg/s
+vehicle[905] = wntvc (double) - TVC natural frequency rad/s
+vehicle[906] = zettvc (double) - TVC damping
+vehicle[908] = gtvc (double) - TVC gain
+vehicle[909] = parm (double) - Propulsion moment arm m
+vehicle[910] = FPB (Matrix 3x1) - Thrust vector in body N
+vehicle[911] = FMPB (Matrix 3x1) - Thrust moments N·m
 
-// gravity_wgs84
-vehicle[62] = GRAVG (Matrix 3x1) - Gravity vector in geocentric coords m/s²
-vehicle[63] = grav (double) - Gravity magnitude m/s²
+// rcs_simple
+vehicle[50] = mrcs_moment (int) - RCS moment mode
+vehicle[51] = mrcs_force (int) - RCS force mode
+vehicle[55-57] = roll/pitch/yaw_mom_max (double) - Max moments N·m
+vehicle[58] = rcs_zeta (double) - RCS damping
+vehicle[59] = rcs_freq (double) - RCS natural frequency rad/s
+vehicle[64] = FMRCS (Matrix 3x1) - RCS moments N·m
+vehicle[84] = FARCS (Matrix 3x1) - RCS forces N
 ```
 
-### Atmosphere Models
+---
 
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `atmosphere_constant` | ✅ | BALL3 | 3/6 | 🎯 Fixed ρ=1.225 kg/m³ at sea level |
-| `atmosphere_us76` | 📝 | ROCKET6G | 3/6 | US Standard Atmosphere 1976 |
-| `atmosphere_us76_extended` | 📝 | GHAME6 | 3/6 | US76 extended to 1000km (NASA) |
-| `atmosphere_table` | 📝 | ROCKET6G | 3/6 | Tabular from weather deck |
-
-**Variable Assignments:**
-```cpp
-// atmosphere_us76
-vehicle[52] = press (double) - Pressure Pa
-vehicle[53] = rho (double) - Density kg/m³
-vehicle[54] = vsound (double) - Speed of sound m/s
-vehicle[58] = tempk (double) - Temperature K
-```
-
-### Wind Models
-
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `wind_none` | 📝 | BALL3 | 3/6 | 🎯 No wind |
-| `wind_constant` | 📝 | ROCKET6G | 3/6 | Constant wind vector |
-| `wind_table` | 📝 | ROCKET6G | 3/6 | Tabular from weather deck |
-| `wind_turbulence` | 📝 | ROCKET6G | 6 | Dryden turbulence model |
-
-## Kinematics Components
-
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `kinematics_3dof_flat` | ✅ | BALL3 | 3 | 🎯 Point mass, flat Earth |
-| `kinematics_3dof_rotating` | 📝 | MAGSIX | 3 | Point mass, rotating Earth |
-| `kinematics_6dof_inertial` | 📝 | ROCKET6G | 6 | Position + attitude, ECI frame |
-| `kinematics_6dof_geodetic` | 📝 | FALCON6 | 6 | Position + attitude, lat/lon/alt |
-
-**Variable Assignments:**
-```cpp
-// kinematics_3dof_flat (BALL3 pattern)
-vehicle[20] = SBEL (Matrix 3x1) - Position in Earth frame m
-vehicle[21] = VBEL (Matrix 3x1) - Velocity in Earth frame m/s
-vehicle[22] = altitude (double) - Altitude above ground m
-```
-
-## Dynamics Components
-
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `newton_3dof` | 📝 | BALL3 | 3 | 🎯 Point mass dynamics F=ma |
-| `newton_6dof` | 📝 | ROCKET6G | 6 | Translational dynamics |
-| `euler_6dof` | 📝 | ROCKET6G | 6 | Rotational dynamics M=Iα |
-
-## Aerodynamics Components
+## Aerodynamics (3/6 extracted)
 
 | Component | Status | Source | DoF | Description |
 |-----------|--------|--------|-----|-------------|
 | `drag_simple` | ✅ | BALL3 | 3 | 🎯 Point mass drag only |
-| `aero_3dof_table` | 📝 | AIM5 | 3 | Lift+drag from tables |
-| `aero_6dof_table` | 📝 | FALCON6 | 6 | Full forces + moments from tables |
+| `aero_3dof_table` | ✅ | AIM5 | 3 | Lift+drag from tables |
+| `aerodynamics_6dof` | ✅ | ROCKET6G | 6 | Full forces + moments from tables |
 | `aero_hypersonic` | 📝 | GHAME6 | 6 | High-speed aerodynamics |
+| `aero_aircraft` | 📝 | FALCON6 | 6 | Aircraft-specific aero tables |
+| `aero_missile` | 📝 | SRAAM6 | 6 | Missile-specific aero tables |
 
 **Variable Assignments:**
 ```cpp
-// drag_simple (BALL3 pattern)
-vehicle[10] = cd (double) - Drag coefficient ND
-vehicle[11] = area (double) - Reference area m²
-vehicle[12] = rho (double) - Air density kg/m³
-vehicle[13] = dvbe (double) - Speed m/s
-vehicle[14] = FSPB (Matrix 3x1) - Specific force m/s²
+// aerodynamics_6dof
+vehicle[100] = maero (int) - Aero mode (11=1-stage, 12=2-stage, 13=3-stage)
+vehicle[104] = refa (double) - Reference area m²
+vehicle[105] = refd (double) - Reference length m
+vehicle[108] = xcg_ref (double) - Reference CG location m
+vehicle[112] = cy (double) - Side force coefficient
+vehicle[113] = cll (double) - Roll moment coefficient
+vehicle[114] = clm (double) - Pitch moment coefficient
+vehicle[115] = cln (double) - Yaw moment coefficient
+vehicle[116] = cx (double) - Axial force coefficient
+vehicle[117] = cz (double) - Normal force coefficient
+vehicle[123] = cla (double) - Lift slope derivative 1/deg
+vehicle[133] = cma (double) - Pitch moment derivative 1/deg
 ```
 
-## Propulsion Components
+---
 
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `thrust_none` | 📝 | BALL3 | 3/6 | 🎯 No propulsion (ballistic) |
-| `thrust_constant` | ✅ | AIM5 | 3/6 | Fixed thrust magnitude |
-| `thrust_table` | 📝 | ROCKET6G | 3/6 | Thrust vs time from table |
-| `rocket_motor_solid` | 📝 | ROCKET6G | 3/6 | Solid rocket motor with staging |
-| `jet_engine` | 📝 | FALCON6 | 6 | Jet thrust vs alt/Mach |
-
-## Guidance Components
-
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `guidance_none` | ✅ | BALL3 | 3/6 | 🎯 Ballistic (no guidance) |
-| `guidance_png` | ✅ | AIM5 | 3/6 | Proportional Navigation Guidance |
-| `guidance_apn` | 📝 | SRAAM6 | 6 | Augmented PNG |
-| `guidance_tpn` | 📝 | AGM6 | 6 | True PNG |
-| `guidance_orbital` | 📝 | ROCKET6G | 6 | Orbital insertion guidance |
-| `guidance_loft` | 📝 | CRUISE5 | 3 | Lofted trajectory |
-
-## Control Components
+## Control (5/8 extracted)
 
 | Component | Status | Source | DoF | Description |
 |-----------|--------|--------|-----|-------------|
 | `control_none` | ✅ | BALL3 | 3/6 | 🎯 No control (ballistic) |
-| `control_pid_roll` | 📝 | AIM5 | 3 | Roll PID autopilot |
-| `control_pid_pitch_yaw` | 📝 | FALCON6 | 6 | 3-axis PID autopilot |
+| `control_rate_damping` | ✅ | AIM5 | 3/6 | Simple rate feedback |
+| `control_accel_autopilot` | ✅ | AIM5 | 3 | 3DoF acceleration autopilot with P-I |
+| `control_accel_6dof` | ✅ | ROCKET6G | 6 | 6DoF dual-channel acceleration autopilot |
+| `actuator_first_order` | ✅ | AIM5 | 3/6 | First-order actuator lag |
+| `control_pid_aircraft` | 📝 | FALCON6 | 6 | 3-axis PID autopilot for aircraft |
 | `control_lqr` | 📝 | GHAME6 | 6 | Linear Quadratic Regulator |
+| `control_flight_path` | 📝 | CRUISE5 | 3/6 | Flight path angle hold |
 
-## Sensor Components
+**Variable Assignments:**
+```cpp
+// control_accel_6dof
+vehicle[500] = maut (int) - Autopilot mode |mauty|mautp|
+vehicle[504] = waclp (double) - Pitch nat freq rad/s
+vehicle[505] = zaclp (double) - Pitch damping
+vehicle[506] = paclp (double) - Pitch real pole 1/s
+vehicle[509] = delimx (double) - Pitch command limit deg
+vehicle[510] = drlimx (double) - Yaw command limit deg
+vehicle[520] = delecx (double) - Pitch command deg
+vehicle[521] = delrcx (double) - Yaw command deg
+vehicle[568-570] = wacly, zacly, pacly - Yaw parameters
+vehicle[575] = alcomx (double) - Lateral accel command g
+vehicle[576] = ancomx (double) - Normal accel command g
+```
 
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `gps_ideal` | 📝 | ROCKET6G | 3/6 | Perfect position measurement |
-| `gps_errors` | 📝 | GHAME6 | 3/6 | GPS with realistic errors |
-| `ins_ideal` | 📝 | ROCKET6G | 6 | Perfect inertial navigation |
-| `ins_errors` | 📝 | GHAME6 | 6 | INS with gyro/accel drift |
-| `seeker_ir` | 📝 | AGM6 | 6 | IR seeker model |
-| `seeker_rf` | 📝 | SRAAM6 | 6 | RF seeker model |
-| `star_tracker` | 📝 | ROCKET6G | 6 | Star tracker for attitude |
+---
 
-## Actuator Components
-
-| Component | Status | Source | DoF | Description |
-|-----------|--------|--------|-----|-------------|
-| `actuator_ideal` | 📝 | AIM5 | 3/6 | 🎯 Instant response |
-| `actuator_lag` | 📝 | FALCON6 | 6 | First-order lag |
-| `actuator_ratelimit` | 📝 | SRAAM6 | 6 | Rate and position limits |
-| `tvc_dynamics` | 📝 | ROCKET6G | 6 | Thrust vector control |
-| `rcs_jets` | 📝 | ROCKET6G | 6 | Reaction control system |
-
-## Navigation Components
+## Dynamics (4/6 extracted)
 
 | Component | Status | Source | DoF | Description |
 |-----------|--------|--------|-----|-------------|
-| `nav_ideal` | 📝 | BALL3 | 3/6 | 🎯 Perfect state knowledge |
-| `nav_gps_only` | 📝 | CRUISE5 | 3 | GPS position only |
+| `forces_3dof` | ✅ | BALL3 | 3 | 🎯 Force summation for 3DoF |
+| `newton_6dof` | ✅ | ROCKET6G | 6 | 6DoF translational dynamics with WGS84 |
+| `euler_6dof` | ✅ | ROCKET6G | 6 | 6DoF rotational dynamics with gyroscopic coupling |
+| `forces_6dof` | ✅ | ROCKET6G | 6 | 6DoF force and moment summation |
+| `newton_3dof` | 📝 | BALL3 | 3 | Point mass dynamics F=ma |
+| `quaternion_6dof` | 📝 | GHAME6 | 6 | Quaternion-based attitude dynamics |
+
+**Variable Assignments:**
+```cpp
+// newton_6dof
+vehicle[219] = lonx (double) - Longitude deg
+vehicle[220] = latx (double) - Latitude deg
+vehicle[221] = alt (double) - Altitude m
+vehicle[225] = dvbe (double) - Geographic speed m/s
+vehicle[226] = dvbi (double) - Inertial speed m/s
+vehicle[228] = psivdx (double) - Heading angle deg
+vehicle[229] = thtvdx (double) - Flight path angle deg
+vehicle[235] = SBII (Matrix 3x1) - Inertial position m
+vehicle[236] = VBII (Matrix 3x1) - Inertial velocity m/s
+vehicle[237] = ABII (Matrix 3x1) - Inertial acceleration m/s²
+
+// euler_6dof
+vehicle[160] = ppx (double) - Roll rate deg/s
+vehicle[161] = qqx (double) - Pitch rate deg/s
+vehicle[162] = rrx (double) - Yaw rate deg/s
+vehicle[164] = WBIB (Matrix 3x1) - Body rates wrt inertial rad/s
+vehicle[166] = WBII (Matrix 3x1) - Angular velocity in inertial rad/s
+
+// forces_6dof
+vehicle[200] = FAPB (Matrix 3x1) - Applied force body frame N
+vehicle[201] = FMB (Matrix 3x1) - Applied moment body frame N·m
+```
+
+---
+
+## Environment (6/8 extracted)
+
+### Gravity Models (2/3)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `gravity_constant` | ✅ | BALL3 | 3/6 | 🎯 Simple g=9.81 m/s² |
+| `gravity_wgs84_simple` | ✅ | ROCKET6G | 6 | Altitude-varying gravity |
+| `gravity_wgs84_full` | 📝 | ROCKET6G | 6 | Full WGS84 ellipsoidal with J2 |
+
+### Atmosphere Models (2/3)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `atmosphere_constant` | ✅ | BALL3 | 3/6 | 🎯 Fixed ρ=1.225 kg/m³ |
+| `atmosphere_us76` | ✅ | ROCKET6G | 3/6 | US Standard Atmosphere 1976 |
+| `atmosphere_table` | 📝 | ROCKET6G | 3/6 | Tabular from weather deck |
+
+### Wind Models (2/2)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `wind_none` | ✅ | BALL3 | 3/6 | 🎯 No wind (calm air) |
+| `wind_constant` | ✅ | ROCKET6G | 3/6 | Constant wind vector |
+
+**Variable Assignments:**
+```cpp
+// Standard environment indices
+vehicle[0] = time (double) - Simulation time sec
+vehicle[50] = grav (double) - Gravity magnitude m/s²
+vehicle[51] = GRAVL (Matrix 3x1) - Gravity vector local m/s²
+vehicle[52] = press (double) - Pressure Pa
+vehicle[53] = rho (double) - Density kg/m³
+vehicle[54] = vsound (double) - Speed of sound m/s
+vehicle[56] = vmach (double) - Mach number
+vehicle[57] = pdynmc (double) - Dynamic pressure Pa
+vehicle[58] = tempk (double) - Temperature K
+vehicle[62] = GRAVG (Matrix 3x1) - Gravity geocentric m/s²
+vehicle[63] = grav (double) - Gravity magnitude m/s²
+```
+
+---
+
+## Guidance (3/8 extracted)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `guidance_none` | ✅ | BALL3 | 3/6 | 🎯 Ballistic (no guidance) |
+| `guidance_proportional_nav` | ✅ | AIM5 | 3/6 | PNG for homing missiles |
+| `guidance_pitch_program` | ✅ | ROCKET6G | 6 | Time-based pitch angle guidance |
+| `guidance_waypoint` | 📝 | CRUISE5 | 3/6 | Waypoint following |
+| `guidance_ltg` | 📝 | ROCKET6G | 6 | Linear Tangent Guidance for ascent |
+| `guidance_apn` | 📝 | SRAAM6 | 6 | Augmented PNG |
+| `guidance_tpn` | 📝 | AGM6 | 6 | True PNG |
+| `guidance_loft` | 📝 | CRUISE5 | 3 | Lofted trajectory |
+
+**Variable Assignments:**
+```cpp
+// guidance_proportional_nav
+vehicle[400] = mguide (int) - Guidance mode
+vehicle[401] = gnav (double) - Navigation gain
+vehicle[402] = gmax (double) - Max acceleration command g
+vehicle[410] = APNA (Matrix 3x1) - Accel command m/s²
+vehicle[411] = annx (double) - Normal accel command g
+vehicle[412] = allx (double) - Lateral accel command g
+
+// guidance_pitch_program
+vehicle[485] = thtvdxcom (double) - Flight path angle command deg
+vehicle[486] = npitch (int) - Number of pitch program points
+vehicle[487-496] = time_table[10] - Time breakpoints sec
+vehicle[497-506] = pitch_table[10] - Pitch breakpoints deg
+```
+
+---
+
+## Kinematics (2/4 extracted)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `kinematics_3dof_flat` | ✅ | BALL3 | 3 | 🎯 Point mass, flat Earth |
+| `kinematics_6dof` | ✅ | ROCKET6G | 6 | DCM integration with Euler angles |
+| `kinematics_3dof_rotating` | 📝 | MAGSIX | 3 | Point mass, rotating Earth |
+| `kinematics_6dof_quaternion` | 📝 | GHAME6 | 6 | Quaternion-based attitude |
+
+**Variable Assignments:**
+```cpp
+// kinematics_3dof_flat
+vehicle[20] = SBEL (Matrix 3x1) - Position in Earth frame m
+vehicle[21] = VBEL (Matrix 3x1) - Velocity in Earth frame m/s
+vehicle[22] = altitude (double) - Altitude above ground m
+vehicle[23] = dvbe (double) - Speed m/s
+
+// kinematics_6dof
+vehicle[121] = TBI (Matrix 3x3) - DCM body to inertial
+vehicle[130] = TBD (Matrix 3x3) - DCM body to geodetic
+vehicle[131] = TDI (Matrix 3x3) - DCM geodetic to inertial
+vehicle[137] = psibdx (double) - Yaw deg
+vehicle[138] = thtbdx (double) - Pitch deg
+vehicle[139] = phibdx (double) - Roll deg
+vehicle[140] = alppx (double) - Total angle of attack deg
+vehicle[141] = phipx (double) - Aerodynamic roll angle deg
+vehicle[144] = alphax (double) - Angle of attack deg
+vehicle[145] = betax (double) - Sideslip angle deg
+vehicle[75] = dvba (double) - Airspeed m/s
+```
+
+---
+
+## Navigation (3/5 extracted)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `target_fixed` | ✅ | AIM5 | 3/6 | 🎯 Stationary target |
+| `target_const_velocity` | ✅ | AIM5 | 3/6 | Constant velocity target |
+| `intercept_simple` | ✅ | AIM5 | 3/6 | Miss distance detection |
 | `nav_gps_ins` | 📝 | ROCKET6G | 6 | GPS/INS Kalman filter |
+| `nav_waypoint` | 📝 | CRUISE5 | 3/6 | Waypoint navigation |
 
-## Intercept/Targeting Components
+**Variable Assignments:**
+```cpp
+// intercept_simple
+vehicle[310] = miss (double) - Miss distance m
+vehicle[311] = time_m (double) - Time at closest approach sec
+vehicle[312] = tgo (double) - Time-to-go sec
+vehicle[313] = hit_flag (int) - Hit detection flag
+```
+
+---
+
+## Propulsion (4/5 extracted)
 
 | Component | Status | Source | DoF | Description |
 |-----------|--------|--------|-----|-------------|
-| `intercept_geometry` | 📝 | AIM5 | 3 | Line-of-sight calculations |
-| `intercept_kinematics` | 📝 | SRAAM6 | 6 | Closing velocity, time-to-go |
+| `thrust_constant` | ✅ | AIM5 | 3/6 | 🎯 Fixed thrust magnitude |
+| `rocket_motor_simple` | ✅ | AIM5 | 3/6 | Constant thrust with burntime |
+| `thrust_table` | ✅ | ROCKET6G | 3/6 | Thrust vs time from table |
+| `propulsion_staging` | ✅ | ROCKET6G | 6 | Multi-stage with variable mass/inertia |
+| `jet_engine` | 📝 | FALCON6 | 6 | Jet thrust vs alt/Mach |
 
-## How to Extract Components
-
-### Step 1: Identify Source Example
-
-Find which example has the module you want:
-```bash
-grep -l "guidance_proportional" example/*/guidance.cpp
-# Result: example/AIM5/aim_modules.cpp
-```
-
-### Step 2: Examine Variable Indices
-
-Look at the `def_xxx()` function to see what variables it uses:
+**Variable Assignments:**
 ```cpp
-void Aim::def_guidance()
-{
-    aim[100].init("wp_lonx", ...);   // Uses indices 100-150
-    aim[101].init("wp_latx", ...);
-    // ...
-}
+// propulsion_staging
+vehicle[10] = mprop (int) - Propulsion mode
+vehicle[15] = vmass (double) - Vehicle mass kg
+vehicle[17] = xcg (double) - CG location from nose m
+vehicle[18] = IBBB (Matrix 3x3) - Inertia tensor kg·m²
+vehicle[21] = fmass0 (double) - Initial fuel mass kg
+vehicle[22] = fmasse (double) - Fuel mass expended kg
+vehicle[24] = aexit (double) - Nozzle exit area m²
+vehicle[25] = spi (double) - Specific impulse sec
+vehicle[26] = thrust (double) - Thrust N
+vehicle[28-29] = xcg_0, xcg_1 - Initial/final CG m
+vehicle[38-41] = moi_roll/trans_0/1 - Initial/final MOI kg·m²
 ```
 
-### Step 3: Check Dependencies
+---
 
-See what it reads from other modules:
+## Sensors (2/4 extracted)
+
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `seeker_perfect` | ✅ | AIM5 | 3/6 | 🎯 Perfect target tracking |
+| `gps_perfect` | ✅ | ROCKET6G | 3/6 | Perfect GPS sensor |
+| `ins_simple` | 📝 | ROCKET6G | 6 | Inertial navigation system |
+| `startrack_perfect` | 📝 | ROCKET6G | 6 | Star tracker for attitude |
+
+**Variable Assignments:**
 ```cpp
-void Aim::guidance(double int_step)
-{
-    // Reads from kinematics
-    Matrix SBEL = aim[20].vec();     // Position
-    Matrix VBEL = aim[21].vec();     // Velocity
+// seeker_perfect
+vehicle[250] = dta (double) - Range to target m
+vehicle[251] = dvta (double) - Closing velocity m/s
+vehicle[252] = UTAA (Matrix 3x1) - LOS unit vector
+vehicle[253] = WOEA (Matrix 3x1) - LOS rate rad/s
 
-    // Reads from target
-    Matrix STEL = aim[200].vec();    // Target position
-
-    // Outputs for control
-    double acmd = ...;
-    aim[110].gets(acmd);             // Commanded acceleration
-}
+// gps_perfect
+vehicle[260] = SBELG (Matrix 3x1) - GPS position m
+vehicle[261] = VBELG (Matrix 3x1) - GPS velocity m/s
+vehicle[262] = altg (double) - GPS altitude m
 ```
 
-### Step 4: Extract and Document
+---
 
-Create standalone file with:
-1. Header comment (inputs, outputs, parameters)
-2. `def_xxx()` function
-3. `init_xxx()` function (if needed)
-4. `xxx()` execution function
-5. Update variable names to generic `vehicle[]`
+## Utilities (2/2 extracted)
 
-### Step 5: Test in Isolation
+| Component | Status | Source | DoF | Description |
+|-----------|--------|--------|-----|-------------|
+| `time_management` | ✅ | ALL | 3/6 | 🎯 Simulation time tracking |
+| `termination` | ✅ | ALL | 3/6 | Multi-criteria stop conditions |
 
-Build a simple test simulation with just that component.
-
-## Component Design Patterns
-
-### Pattern 1: Pure Calculation (No State)
-
-Example: `drag_simple`, `gravity_constant`
-
+**Variable Assignments:**
 ```cpp
-void Vehicle::module_name(double int_step)
-{
-    // Read inputs
-    double input1 = vehicle[X].real();
-
-    // Calculate
-    double output = f(input1);
-
-    // Write outputs
-    vehicle[Y].gets(output);
-}
+// Standard time variables
+vehicle[0] = time (double) - Simulation time sec
+vehicle[1] = event_time (double) - Event timer sec
 ```
 
-### Pattern 2: With Initialization
-
-Example: `guidance_png`, `control_pid`
-
-```cpp
-void Vehicle::init_module_name()
-{
-    // Set initial values
-    vehicle[X].gets(initial_value);
-}
-
-void Vehicle::module_name(double int_step)
-{
-    // Use initialized values
-    // Update state
-}
-```
-
-### Pattern 3: With State Variables
-
-Example: `ins_errors`, `actuator_lag`
-
-```cpp
-void Vehicle::module_name(double int_step)
-{
-    // Read state
-    double state = vehicle[STATE_INDEX].real();
-
-    // Integrate
-    double state_dot = ...;
-    state = state + state_dot * int_step;
-
-    // Write back
-    vehicle[STATE_INDEX].gets(state);
-}
-```
+---
 
 ## Variable Index Allocation Guide
 
 To avoid conflicts, use these index ranges:
 
-| Range | Purpose | Example |
-|-------|---------|---------|
-| 0-9 | Environment | gravity, atmosphere |
-| 10-19 | Forces | drag, lift, thrust |
-| 20-29 | Kinematics | position, velocity |
-| 30-39 | Dynamics | accelerations |
-| 40-49 | Attitude | Euler angles, quaternions |
-| 50-79 | Aerodynamics | coefficients, angles |
-| 80-99 | Propulsion | thrust, fuel |
-| 100-129 | Guidance | waypoints, commands |
-| 130-149 | Control | autopilot states |
-| 150-179 | Sensors | GPS, INS |
-| 180-199 | Navigation | filtered state |
-| 200-229 | Target/Intercept | geometry |
-| 230+ | Vehicle-specific | custom |
+| Range | Purpose | Components |
+|-------|---------|-----------|
+| 0-9 | Core | time, event_time, utility flags |
+| 10-49 | Propulsion | mprop, thrust, mass, inertia, fuel |
+| 50-99 | Environment & RCS | gravity, atmosphere, wind, RCS |
+| 100-199 | Aerodynamics | coefficients, derivatives, modes |
+| 200-249 | Dynamics | forces, moments, FAPB, FMB |
+| 250-299 | Sensors | seeker, GPS, star tracker |
+| 300-399 | Navigation | intercept, target, waypoint |
+| 400-499 | Guidance | commands, modes, guidance law |
+| 500-599 | Control | autopilot, control commands |
+| 600-799 | Reserved | Future expansion |
+| 800-999 | Actuators & Specialized | TVC, actuators, specialized |
 
-## Next Steps
-
-1. **Extract remaining components** from examples
-2. **Test each component** in isolation
-3. **Create assembly guide** showing common combinations
-4. **Build Python constructor** for automatic code generation
-5. **Add component templates** for creating new components
-
-## Contributing
-
-To add a component:
-
-1. Extract from example
-2. Document header (inputs, outputs, params)
-3. Use standard variable indices
-4. Test standalone
-5. Submit PR with component + test
+---
 
 ## Status Summary
 
-- ✅ **8** components fully extracted
-- 📝 **45+** components identified and documented
-- 🎯 **10** recommended starter components marked
+### Extraction Progress by Category
 
-Priority for next extraction:
-1. Kinematics (3DoF and 6DoF)
-2. Newton dynamics (3DoF and 6DoF)
-3. Simple aerodynamics
-4. Proportional navigation
-5. PID control
+- ✅ Actuators: 2/4 (50%)
+- ✅ Aerodynamics: 3/6 (50%)
+- ✅ Control: 5/8 (63%)
+- ✅ Dynamics: 4/6 (67%)
+- ✅ Environment: 6/8 (75%)
+- ✅ Guidance: 3/8 (38%)
+- ✅ Kinematics: 2/4 (50%)
+- ✅ Navigation: 3/5 (60%)
+- ✅ Propulsion: 4/5 (80%)
+- ✅ Sensors: 2/4 (50%)
+- ✅ Utilities: 2/2 (100%)
+
+**Total: 36 of ~55 components extracted (72% complete)**
+
+### Ready-to-Build Simulations
+
+- ✅ **BALL3**: Ballistic projectile (100%)
+- ✅ **ROCKET6G**: Three-stage space launch vehicle (100%)
+- 🟡 **Aircraft**: 6DoF aircraft (85% - needs waypoint guidance)
+- 🟡 **Cruise Missile**: 6DoF cruise missile (90% - needs waypoint)
+
+---
+
+## Next Priority Extractions
+
+1. guidance_waypoint (CRUISE5) - Enable autonomous flight paths
+2. startrack_perfect (ROCKET6G) - Star tracker sensor
+3. ins_simple (ROCKET6G) - Inertial navigation
+4. control_autopilot_aircraft (FALCON6) - Aircraft autopilot
+5. aerodynamics_aircraft (FALCON6) - Aircraft-specific aero
+6. control_surface_actuator (FALCON6) - Aileron, elevator, rudder
+7. guidance_ltg (ROCKET6G) - Linear tangent guidance
+8. atmosphere_table (ROCKET6G) - Custom atmosphere
+9. nav_gps_ins (ROCKET6G) - GPS/INS fusion
+10. jet_engine (FALCON6) - Turbofan/turbojet model
