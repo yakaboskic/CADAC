@@ -123,6 +123,14 @@ def main():
     print("  3. Compare: sim.compare(results, 'BALL3/traj.asc')")
     print("=" * 60)
 
+    # Compile and run the simulation
+    print("\nCompiling and running the simulation...")
+    sim.compile()
+    print(f"✓ Simulation compiled: {sim.executable_path}")
+    results = sim.run(duration=10.0, dt=0.01)
+    print(f"✓ Simulation results: {results}")
+
+
     return 0
 
 
