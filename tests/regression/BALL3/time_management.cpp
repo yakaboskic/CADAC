@@ -45,9 +45,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //Definition of time module-variables
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::def_time()
+void Ball::def_time()
 {
 	//Definition of module-variables
 	vehicle[0].init("time",0,"Simulation time - sec","time","exec","scrn,plot,com");
@@ -56,9 +56,9 @@ void Vehicle::def_time()
 
 ///////////////////////////////////////////////////////////////////////////////
 //Initial calculations of time module
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::init_time(double sim_time)
+void Ball::init_time(double sim_time)
 {
 	//Initialize time to simulation time
 	vehicle[0].gets(sim_time);
@@ -67,13 +67,13 @@ void Vehicle::init_time(double sim_time)
 
 ///////////////////////////////////////////////////////////////////////////////
 //Time management module
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 //
 // Updates simulation time and event time
 //
 // xxxxxx Created for component library
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::time_management(double sim_time, double event_time)
+void Ball::time_management(double sim_time, double event_time)
 {
 	//Update time variables
 	vehicle[0].gets(sim_time);

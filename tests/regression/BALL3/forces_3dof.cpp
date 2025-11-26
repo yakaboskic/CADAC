@@ -9,20 +9,20 @@
 //   Use for: 3DoF missiles, aircraft, projectiles
 //
 // INPUTS (from vehicle array):
-//   vehicle[0]  - grav - double - Gravity magnitude m/s²
-//   vehicle[11] - area - double - Reference area m²
-//   vehicle[25] - caaim - double - Axial force coefficient
-//   vehicle[26] - cyaim - double - Side force coefficient
-//   vehicle[27] - cnaim - double - Normal force coefficient
-//   vehicle[57] - pdynmc - double - Dynamic pressure Pa
-//   vehicle[60] - thrust - double - Thrust force N
-//   vehicle[61] - mass - double - Vehicle mass kg
+//   ball[0]  - grav - double - Gravity magnitude m/s²
+//   ball[11] - area - double - Reference area m²
+//   ball[25] - caaim - double - Axial force coefficient
+//   ball[26] - cyaim - double - Side force coefficient
+//   ball[27] - cnaim - double - Normal force coefficient
+//   ball[57] - pdynmc - double - Dynamic pressure Pa
+//   ball[60] - thrust - double - Thrust force N
+//   ball[61] - mass - double - Vehicle mass kg
 //
 // OUTPUTS (to vehicle array):
-//   vehicle[14] - FSPA - Matrix(3x1) - Specific force (accel) in body m/s²
-//   vehicle[150] - aax - double - Axial acceleration g's
-//   vehicle[151] - alx - double - Lateral acceleration g's
-//   vehicle[152] - anx - double - Normal acceleration g's
+//   ball[14] - FSPA - Matrix(3x1) - Specific force (accel) in body m/s²
+//   ball[150] - aax - double - Axial acceleration g's
+//   ball[151] - alx - double - Lateral acceleration g's
+//   ball[152] - anx - double - Normal acceleration g's
 //
 // PARAMETERS (from input.asc):
 //   None (uses forces from other modules)
@@ -56,22 +56,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //Definition of forces module-variables
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::def_forces()
+void Ball::def_forces()
 {
 	//Definition of module-variables
 	//output to other modules
-	vehicle[14].init("FSPA",0,0,0,"Specific force in body frame - m/s^2","forces","out","");
+	ball[14].init("FSPA",0,0,0,"Specific force in body frame - m/s^2","forces","out","");
 	//diagnostics
-	vehicle[150].init("aax",0,"Axial acceleration - g's","forces","diag","");
-	vehicle[151].init("alx",0,"Lateral acceleration - g's","forces","diag","scrn,plot");
-	vehicle[152].init("anx",0,"Normal acceleration - g's","forces","diag","scrn,plot");
+	ball[150].init("aax",0,"Axial acceleration - g's","forces","diag","");
+	ball[151].init("alx",0,"Lateral acceleration - g's","forces","diag","scrn,plot");
+	ball[152].init("anx",0,"Normal acceleration - g's","forces","diag","scrn,plot");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //Forces module
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 //
 // Sums aerodynamic, propulsive, and gravitational forces
 // Computes specific force (force per unit mass = acceleration)
@@ -79,7 +79,7 @@ void Vehicle::def_forces()
 // 070412 Created by Peter Zipfel
 // xxxxxx Adapted to component library
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::forces(double int_step)
+void Ball::forces(double int_step)
 {
 	//local module-variables
 	Matrix FSPA(3,1);
@@ -89,14 +89,14 @@ void Vehicle::forces(double int_step)
 
 	//localizing module-variables
 	//input from other modules
-	double grav=vehicle[0].real();
-	double area=vehicle[11].real();
-	double caaim=vehicle[25].real();
-	double cyaim=vehicle[26].real();
-	double cnaim=vehicle[27].real();
-	double pdynmc=vehicle[57].real();
-	double thrust=vehicle[60].real();
-	double mass=vehicle[61].real();
+	double grav=ball[0].real();
+	double area=ball[11].real();
+	double caaim=ball[25].real();
+	double cyaim=ball[26].real();
+	double cnaim=ball[27].real();
+	double pdynmc=ball[57].real();
+	double thrust=ball[60].real();
+	double mass=ball[61].real();
 
 	//-------------------------------------------------------------------------
 	//Force summation in body coordinates
@@ -128,9 +128,9 @@ void Vehicle::forces(double int_step)
 	//-------------------------------------------------------------------------
 	//loading module-variables
 	//output to other modules
-	vehicle[14].gets_vec(FSPA);
+	ball[14].gets_vec(FSPA);
 	//diagnostics
-	vehicle[150].gets(aax);
-	vehicle[151].gets(alx);
-	vehicle[152].gets(anx);
+	ball[150].gets(aax);
+	ball[151].gets(alx);
+	ball[152].gets(anx);
 }

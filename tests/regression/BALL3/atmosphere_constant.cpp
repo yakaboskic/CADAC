@@ -11,7 +11,7 @@
 //   None
 //
 // OUTPUTS (to vehicle array):
-//   vehicle[12] - rho - kg/m^3 - Air density
+//   ball[12] - rho - kg/m^3 - Air density
 //
 // PARAMETERS (from input.asc):
 //   None (hardcoded to 1.225 kg/m³ at sea level)
@@ -33,7 +33,7 @@
 //     environment   def,exec
 //
 //   Variable index allocation:
-//     Define vehicle[12] for density in def_environment()
+//     Define ball[12] for density in def_environment()
 //
 // NOTES:
 //   - For vacuum/space, change rho = 0.0
@@ -45,34 +45,34 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //Definition of environment module-variables
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::def_environment()
+void Ball::def_environment()
 {
 	//Definition of module-variables
 	//output data
-	vehicle[12].init("rho",0,"Air density - kg/m^3","out","","");
+	ball[12].init("rho",0,"Air density - kg/m^3","out","","");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //Environment module
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 //
 // Provides constant atmospheric density
 //
 // 030424 Created by Peter Zipfel
 // xxxxxx Adapted to component library
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::environment(double int_step)
+void Ball::environment(double int_step)
 {
 	//localizing module-variables
 	//output data
-	double rho=vehicle[12].real();
+	double rho=ball[12].real();
 
 	//Constant air density at sea level
 	rho = 1.225; // kg/m^3 (standard sea level density)
 
 	//loading module-variables
 	//output data
-	vehicle[12].gets(rho);
+	ball[12].gets(rho);
 }

@@ -45,44 +45,85 @@ class Trajectory:
         with open(filepath, 'r') as f:
             lines = f.readlines()
 
-        # Parse header to get variable names
+        # Parse CADAC format:
+        # Line 1: Title and metadata
+        # Line 2: Header numbers
+        # Lines 3+: Variable names (may wrap)
+        # Lines N+: Data (may wrap)
+
+        # Skip first 2 lines (title and header)
+        i = 2
+
+        # Collect variable names (may be wrapped across multiple lines)
         variables = []
-        data_start_line = 0
-
-        for i, line in enumerate(lines):
-            if line.strip().startswith('//'):
+        while i < len(lines):
+            line = lines[i].strip()
+            if not line or line.startswith('//'):
+                i += 1
                 continue
-            elif not variables:
-                # First non-comment line should be variable names
-                variables = line.strip().split()
-                data_start_line = i + 1
+
+            tokens = line.split()
+            # Check if this looks like variable names (not all numeric)
+            try:
+                # Try to convert to float - if it succeeds, it's data not variables
+                [float(x) for x in tokens]
+                # All numeric - this is the start of data
                 break
+            except ValueError:
+                # Has non-numeric tokens - still variable names
+                variables.extend(tokens)
+                i += 1
 
-        # Parse data
-        data_lines = [line.strip() for line in lines[data_start_line:]
-                      if line.strip() and not line.startswith('//')]
+        data_start_line = i
 
-        # Convert to numpy array
-        raw_data = []
-        for line in data_lines:
+        if not variables:
+            raise ValueError("No variable names found in trajectory file")
+
+        # Collect all remaining tokens as data values
+        all_values = []
+        for line in lines[data_start_line:]:
+            line = line.strip()
+            if not line or line.startswith('//'):
+                continue
             try:
                 values = [float(x) for x in line.split()]
-                if len(values) == len(variables):
-                    raw_data.append(values)
+                all_values.extend(values)
             except ValueError:
                 continue
 
-        if not raw_data:
+        if not all_values:
             raise ValueError("No valid data found in trajectory file")
+
+        # Group values into rows of len(variables) each
+        num_vars = len(variables)
+        raw_data = []
+        for i in range(0, len(all_values), num_vars):
+            if i + num_vars <= len(all_values):
+                raw_data.append(all_values[i:i+num_vars])
+
+        if not raw_data:
+            raise ValueError("No complete data rows found in trajectory file")
 
         data_array = np.array(raw_data)
 
-        # Extract time and build data dictionary
-        time = data_array[:, 0] if variables[0].lower() in ['time', 't'] else np.arange(len(data_array))
-
+        # Build data dictionary
         data_dict = {}
         for i, var_name in enumerate(variables):
             data_dict[var_name] = data_array[:, i]
+
+        # Try to find time variable
+        # Check for common time variable names
+        time = None
+        for time_name in ['time', 'Time', 'TIME', 't']:
+            if time_name in data_dict:
+                time = data_dict[time_name]
+                break
+
+        # If no time variable found, generate synthetic time array
+        if time is None:
+            # Generate time based on number of points
+            # Assume uniform sampling at 0.05s intervals (typical plot_step)
+            time = np.arange(len(raw_data), dtype=float) * 0.05
 
         return cls(time, data_dict)
 

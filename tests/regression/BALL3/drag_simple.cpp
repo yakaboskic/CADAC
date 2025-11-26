@@ -10,21 +10,21 @@
 //   Use for: Ballistics, simple projectiles, cannonballs
 //
 // INPUTS (from vehicle array):
-//   vehicle[0]  - grav - double - Gravity acceleration m/s^2
-//   vehicle[12] - rho - double - Air density kg/m^3
-//   vehicle[21] - VBEL - Matrix(3x1) - Velocity in Earth frame m/s
+//   ball[0]  - grav - double - Gravity acceleration m/s^2
+//   ball[12] - rho - double - Air density kg/m^3
+//   ball[21] - VBEL - Matrix(3x1) - Velocity in Earth frame m/s
 //
 // OUTPUTS (to vehicle array):
-//   vehicle[13] - dvbe - double - Speed m/s
-//   vehicle[14] - FSPB - Matrix(3x1) - Specific force m/s^2
+//   ball[13] - dvbe - double - Speed m/s
+//   ball[14] - FSPB - Matrix(3x1) - Specific force m/s^2
 //
 // PARAMETERS (from input.asc):
-//   vehicle[10] - cd - double - Drag coefficient (dimensionless)
-//   vehicle[11] - area - double - Reference area m^2
+//   ball[10] - cd - double - Drag coefficient (dimensionless)
+//   ball[11] - area - double - Reference area m^2
 //
 // DEPENDENCIES:
-//   - Requires: Environment module for gravity (vehicle[0]) and density (vehicle[12])
-//   - Requires: Kinematics module for velocity (vehicle[21])
+//   - Requires: Environment module for gravity (ball[0]) and density (ball[12])
+//   - Requires: Kinematics module for velocity (ball[21])
 //   - Provides: Specific force for dynamics/kinematics integration
 //
 // REFERENCE:
@@ -55,24 +55,24 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //Definition of forces module-variables
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::def_forces()
+void Ball::def_forces()
 {
 	//Definition of module-variables
 	//input data
-	vehicle[10].init("cd",0,"Drag coefficient - ND","data","","");
-	vehicle[11].init("area",0,"Reference area - m^2","data","","");
+	ball[10].init("cd",0,"Drag coefficient - ND","data","","");
+	ball[11].init("area",0,"Reference area - m^2","data","","");
 	//diagnostic output
-	vehicle[13].init("dvbe",0,"Speed - m/s","out","scrn","plot");
+	ball[13].init("dvbe",0,"Speed - m/s","out","scrn","plot");
 	//output to other modules
-	vehicle[14].init("FSPB",0,0,0,"Specific force in body frame - m/s^2","out","","");
+	ball[14].init("FSPB",0,0,0,"Specific force in body frame - m/s^2","out","","");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //Forces module
 //Calculates drag force for point mass
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 //
 // Computes aerodynamic drag opposing velocity
 // Combines with gravity to produce total specific force
@@ -80,19 +80,19 @@ void Vehicle::def_forces()
 // 030424 Created by Peter Zipfel
 // xxxxxx Adapted to component library
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::forces(double int_step)
+void Ball::forces(double int_step)
 {
 	//local module-variables
 	Matrix FSPB(3,1);
 
 	//localizing module-variables
 	//input data
-	double cd=vehicle[10].real();
-	double area=vehicle[11].real();
+	double cd=ball[10].real();
+	double area=ball[11].real();
 	//input from other modules
-	double grav=vehicle[0].real();
-	double rho=vehicle[12].real();
-	Matrix VBEL=vehicle[21].vec();
+	double grav=ball[0].real();
+	double rho=ball[12].real();
+	Matrix VBEL=ball[21].vec();
 
 	//-------------------------------------------------------------------------
 	//Speed
@@ -121,6 +121,6 @@ void Vehicle::forces(double int_step)
 
 	//loading module-variables
 	//output to other modules
-	vehicle[13].gets(dvbe);
-	vehicle[14].gets_vec(FSPB);
+	ball[13].gets(dvbe);
+	ball[14].gets_vec(FSPB);
 }

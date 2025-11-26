@@ -55,9 +55,9 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //Definition of termination module-variables
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::def_termination()
+void Ball::def_termination()
 {
 	//Definition of module-variables
 	//input data
@@ -71,14 +71,14 @@ void Vehicle::def_termination()
 
 ///////////////////////////////////////////////////////////////////////////////
 //Termination module
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 //
 // Checks termination conditions
 // Sets stop flag when any condition is met
 //
 // xxxxxx Created for component library
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::termination(double int_step)
+void Ball::termination(double int_step)
 {
 	//local module-variables
 	int stop(0);

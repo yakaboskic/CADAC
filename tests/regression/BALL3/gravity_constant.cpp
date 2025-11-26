@@ -11,7 +11,7 @@
 //   None
 //
 // OUTPUTS (to vehicle array):
-//   vehicle[0] - grav - m/s^2 - Gravity acceleration magnitude
+//   ball[0] - grav - m/s^2 - Gravity acceleration magnitude
 //
 // PARAMETERS (from input.asc):
 //   None (hardcoded to 9.81 m/s²)
@@ -32,41 +32,41 @@
 //     environment   def,exec
 //
 //   Variable index allocation:
-//     Define vehicle[0] for gravity in def_environment()
+//     Define ball[0] for gravity in def_environment()
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "class_hierarchy.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 //Definition of environment module-variables
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::def_environment()
+void Ball::def_environment()
 {
 	//Definition of module-variables
 	//output data
-	vehicle[0].init("grav","D",0,"Gravity acceleration - m/s^2","environment","out","");
+	ball[0].init("grav","D",0,"Gravity acceleration - m/s^2","environment","out","");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //Environment module
-//Member function of class 'Vehicle'
+//Member function of class 'Ball'
 //
 //Provides constant gravity acceleration
 //
 //030424 Created by Peter Zipfel
 //xxxxxx Adapted to component library
 ///////////////////////////////////////////////////////////////////////////////
-void Vehicle::environment(double int_step)
+void Ball::environment(double int_step)
 {
 	//localizing module-variables
 	//output data
-	double grav=vehicle[0].real();
+	double grav=ball[0].real();
 
 	//Simple constant gravity
 	grav = 9.81; // m/s^2 (standard gravity at sea level)
 
 	//loading module-variables
 	//output data
-	vehicle[0].gets(grav);
+	ball[0].gets(grav);
 }
