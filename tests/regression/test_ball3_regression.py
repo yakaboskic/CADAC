@@ -15,8 +15,8 @@ import numpy as np
 # Add cadac_builder to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from cadac_builder import Simulation, Component
-from cadac_builder.trajectory import Trajectory, TrajectoryComparator
+from pycas import Simulation, Component
+from pycas.trajectory import Trajectory, TrajectoryComparator
 
 
 class BALL3Test:
