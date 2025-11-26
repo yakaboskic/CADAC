@@ -53,6 +53,11 @@ class Simulation:
         self._compiled = False
         self._executable_path: Optional[Path] = None
 
+    @property
+    def executable_path(self) -> Optional[Path]:
+        """Get path to compiled executable"""
+        return self._executable_path
+
     def add_component(self, component: Component) -> 'Simulation':
         """
         Add a component to the simulation
