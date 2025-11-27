@@ -116,11 +116,8 @@ class Simulation:
         # Check for required components
         component_names = [c.name for c in self.components]
 
-        if 'time_management' not in component_names:
-            errors.append("Missing required component: time_management")
-
-        if 'termination' not in component_names:
-            errors.append("Missing required component: termination")
+        # Note: time_management and termination are optional
+        # The CADAC framework handles these automatically
 
         # TODO: Add more sophisticated validation
         # For now, just check that components exist in registry

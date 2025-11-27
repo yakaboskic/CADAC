@@ -131,6 +131,30 @@ class Trajectory:
         """Get data for a specific variable"""
         return self.data.get(variable)
 
+    def to_dataframe(self):
+        """
+        Convert trajectory to Pandas DataFrame
+
+        Returns:
+            pd.DataFrame with time index and all variables as columns
+
+        Raises:
+            ImportError: If pandas is not installed
+        """
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError(
+                "Pandas is required for DataFrame conversion. "
+                "Install with: pip install pandas"
+            )
+
+        # Create DataFrame with time as index
+        df = pd.DataFrame(self.data, index=self.time)
+        df.index.name = 'time'
+
+        return df
+
     def plot(self, *variables: str, title: Optional[str] = None):
         """
         Plot trajectory variables

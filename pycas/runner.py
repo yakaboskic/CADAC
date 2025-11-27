@@ -34,14 +34,14 @@ class Runner:
             raise RuntimeError(f"Input file not found: {input_file}")
 
         # CADAC executables expect input.asc in their directory
-        # Copy input file to executable directory
+        # Copy input file to executable directory (build directory)
         exec_dir = executable.parent
         exec_input = exec_dir / 'input.asc'
         shutil.copy(input_file, exec_input)
-        print(f"  Copied input file to {exec_input}")
+        print(f"  Running simulation...")
+        print(f"    Copied input to {exec_dir}/input.asc")
 
-        # Run simulation from executable directory
-        print(f"  Running {executable.name}...")
+        # Run simulation from build directory
         try:
             result = subprocess.run(
                 [f'./{executable.name}'],
@@ -52,19 +52,23 @@ class Runner:
                 timeout=300  # 5 minute timeout
             )
 
-            print(f"  ✓ Simulation completed")
+            print(f"    ✓ Simulation completed")
 
-            # Check for trajectory output in executable directory
+            # Check for trajectory output in build directory
             traj_file = exec_dir / 'plot1.asc'
             if not traj_file.exists():
                 traj_file = exec_dir / 'traj.asc'
 
             if not traj_file.exists():
-                raise RuntimeError("Trajectory file not generated")
+                raise RuntimeError("Trajectory file not generated. Check simulation output.")
 
+            print(f"    ✓ Generated {traj_file.name}")
             return traj_file
 
         except subprocess.TimeoutExpired:
             raise RuntimeError("Simulation timed out (5 minutes)")
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Simulation failed:\n{e.stderr}")
+            print(f"\n❌ Simulation failed:")
+            print(f"STDOUT:\n{e.stdout}")
+            print(f"STDERR:\n{e.stderr}")
+            raise RuntimeError(f"Simulation execution failed. See output above.")
