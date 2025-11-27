@@ -3,6 +3,7 @@ Runner - Executes CADAC simulations
 """
 
 import subprocess
+import shutil
 from pathlib import Path
 
 
@@ -32,22 +33,31 @@ class Runner:
         if not input_file.exists():
             raise RuntimeError(f"Input file not found: {input_file}")
 
-        # Run simulation
+        # CADAC executables expect input.asc in their directory
+        # Copy input file to executable directory
+        exec_dir = executable.parent
+        exec_input = exec_dir / 'input.asc'
+        shutil.copy(input_file, exec_input)
+        print(f"  Copied input file to {exec_input}")
+
+        # Run simulation from executable directory
+        print(f"  Running {executable.name}...")
         try:
             result = subprocess.run(
-                [str(executable)],
-                cwd=self.working_dir,
+                [f'./{executable.name}'],
+                cwd=exec_dir,
                 capture_output=True,
                 text=True,
                 check=True,
                 timeout=300  # 5 minute timeout
             )
 
-            # Check for trajectory output
-            traj_file = self.working_dir / 'traj.asc'
+            print(f"  ✓ Simulation completed")
+
+            # Check for trajectory output in executable directory
+            traj_file = exec_dir / 'plot1.asc'
             if not traj_file.exists():
-                # Try alternative names
-                traj_file = self.working_dir / 'trajectory.asc'
+                traj_file = exec_dir / 'traj.asc'
 
             if not traj_file.exists():
                 raise RuntimeError("Trajectory file not generated")

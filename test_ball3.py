@@ -123,13 +123,20 @@ def main():
     print("  3. Compare: sim.compare(results, 'BALL3/traj.asc')")
     print("=" * 60)
 
-    # Compile and run the simulation
-    print("\nCompiling and running the simulation...")
-    sim.compile()
-    print(f"✓ Simulation compiled: {sim.executable_path}")
-    results = sim.run(duration=10.0, dt=0.01)
-    print(f"✓ Simulation results: {results}")
-
+    # Note about compilation
+    print("\n" + "=" * 60)
+    print("NOTE: Full compilation requires framework adaptation")
+    print("=" * 60)
+    print("\nThis demo shows the pyCAS Python API for building simulations.")
+    print("For full compilation and execution from modular components, see:")
+    print("  tests/regression/test_ball3_regression.py")
+    print("\nThe regression test demonstrates:")
+    print("  - Framework adaptation (Vehicle → Ball)")
+    print("  - Module merging (environment, forces)")
+    print("  - Complete C++ compilation")
+    print("  - Simulation execution")
+    print("  - Trajectory validation")
+    print("\n" + "=" * 60)
 
     return 0
 
