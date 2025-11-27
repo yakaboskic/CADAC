@@ -23,11 +23,16 @@ from pycas import Simulation, Component
 
 # Build a custom ballistic simulation from components
 sim = Simulation("MyProjectile")
+sim.add_component(Component.time_management())
 sim.add_component(Component.kinematics_3dof_flat())
 sim.add_component(Component.forces_3dof())
 sim.add_component(Component.drag_simple(cd=0.47, area=0.01))
 sim.add_component(Component.gravity_constant())
 sim.add_component(Component.atmosphere_constant())
+sim.add_component(Component.termination(
+        altitude_min=0.0,   # Stop when hitting ground
+        time_max=10.0       # Or after 10 seconds
+    ))
 
 # Set initial conditions
 sim.set_initial_state(
